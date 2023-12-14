@@ -49,11 +49,11 @@ steps:
     id: 'Pull and Run Docker'
 
   # -------------------- Run playwright e2e tests ---------------------------------
-  - name: 'node:12-slim'
-    entrypoint: 'bash'
+  - name: 'node'
+    entrypoint: 'npx'
     args: [ '-c', 'npx playwright install && npx playwright tests' ]
     id: 'Run Playwright Tests'
-    waitFor: ['-']
+    waitFor: ['Pull and Run Docker']
 
   # -------------------- Deploy ---------------------------------
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
