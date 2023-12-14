@@ -3,8 +3,8 @@ steps:
   # -------------------- Login to docker ---------------------------------
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: [ '-c', 'docker login --username=$$USERNAME --password=$$PASSWORD' ]
-    secretEnv: [ 'USERNAME', 'PASSWORD' ]
+    args: [ '-c', 'docker login --username=$$DOCKER_USERNAME --password=$$DOCKER_PASSWORD' ]
+    secretEnv: [ 'DOCKER_USERNAME', 'DOCKER_PASSWORD' ]
 
   # -------------------- Build docker image from dockerfile in the root of the repo ---------------------------------
   - name: 'gcr.io/cloud-builders/docker'
@@ -61,8 +61,8 @@ steps:
   # -------------------- Push built docker image to docker hub ---------------------------------
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args: [ '-c', 'docker push $$USERNAME/selfcare-backend:$COMMIT_SHA' ]
-    secretEnv: [ 'USERNAME' ]
+    args: [ '-c', 'docker push $$DOCKER_USERNAME/selfcare-backend:$COMMIT_SHA' ]
+    secretEnv: [ 'DOCKER_USERNAME' ]
 
   # -------------------- Run docker image ---------------------------------
   - name: 'gcr.io/cloud-builders/docker'
