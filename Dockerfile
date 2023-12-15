@@ -1,12 +1,19 @@
-FROM node:20.0.0-alpine as builder
+FROM node:21-alpine as builder
 # Set the working directory to /app inside the container
 WORKDIR /app
 # Copy app files
 COPY . .
 
+RUN cd /functions && npm install
+
+RUN cd ..
+
 # ==== BUILD =====
 # Install dependencies (npm ci makes sure the exact versions in the lockfile gets installed)
 RUN npm install
+
+
+
 # Build the app
 RUN npm run build
 
