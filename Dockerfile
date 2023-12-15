@@ -4,6 +4,8 @@ WORKDIR /app
 # Copy app files
 COPY . .
 
+RUN echo ls -la
+
 RUN cd /functions && npm install
 
 RUN cd ..
