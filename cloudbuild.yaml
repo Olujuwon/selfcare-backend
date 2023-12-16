@@ -37,12 +37,6 @@ steps:
       - TEST_USER_PASSWORD
       - TEST_USER_ID
 
-  # -------------------- Push built docker image to docker hub ---------------------------------
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [ '-c', 'docker push $$DOCKER_USERNAME/selfcare-backend:$COMMIT_SHA' ]
-    secretEnv: [ 'DOCKER_USERNAME' ]
-
   # -------------------- Run docker image ---------------------------------
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'run', '-d', '-p', '8000:8000', '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA' ]
