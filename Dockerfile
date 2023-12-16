@@ -21,8 +21,8 @@ RUN npm run build
 
 # ==== RUN =======
 # Set the env to "production"
-ENV ENV develop
-ENV VERSION 0.0.1
+ENV ENV test
+ENV VERSION 0.1.0
 ENV PORT=$PORT
 ENV SERVICE_NAME=$SERVICE_NAME
 ENV DB_HOST=$DB_HOST
@@ -33,6 +33,6 @@ ENV DB_PORT=$DB_PORT
 ENV DB_CLIENT=$DB_CLIENT
 ENV FILE_ENCODING utf8
 # Expose the port on which the app will be running (8080 is the default that `serve` uses)
-#EXPOSE 8004
+EXPOSE 8000
 # Start the app
 CMD [ "npm", "start" ]
