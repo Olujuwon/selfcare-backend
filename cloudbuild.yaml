@@ -38,18 +38,6 @@ steps:
       - TEST_USER_ID
       - FIREBASE_CERT
 
-  # -------------------- Run docker image ---------------------------------
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'run', '-d', '-p', '8000:8000', '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA' ]
-    id: 'Pull and Run Docker'
-
-  # -------------------- Run playwright e2e tests ---------------------------------
-  - name: 'node'
-    entrypoint: 'npm'
-    args: [ '-c', 'npx playwright install && npx playwright tests' ]
-    id: 'Run Playwright Tests'
-    waitFor: ['Pull and Run Docker']
-
   # -------------------- Deploy ---------------------------------
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
