@@ -1,11 +1,5 @@
 # [START cloudbuild_quickstart_build]
 steps:
-  # -------------------- Login to docker ---------------------------------
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [ '-c', 'docker login --username=$$DOCKER_USERNAME --password=$$DOCKER_PASSWORD' ]
-    secretEnv: [ 'DOCKER_USERNAME', 'DOCKER_PASSWORD' ]
-
   # -------------------- Build docker image from dockerfile in the root of the repo ---------------------------------
   - name: 'gcr.io/cloud-builders/docker'
     args: 
@@ -38,6 +32,13 @@ steps:
       - TEST_USER_ID
       - FIREBASE_CERT
 
+  # -------------------- Push to google repo ---------------------------------
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+    id: 'push'
+
   # -------------------- Deploy ---------------------------------
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
@@ -53,7 +54,7 @@ steps:
       - '--quiet'
     id: Deploy
     entrypoint: gcloud
-    waitFor: ['build']
+    waitFor: ['push']
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
 options:
