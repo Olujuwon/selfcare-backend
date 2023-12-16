@@ -12,7 +12,7 @@ const firebaseJsonCert = JSON.parse(process.env.FIREBASE_CERT as string);
 const fastify = Fastify({
   logger: true,
 });
-const port = process.env.PORT ? Number(process.env.PORT) : 8002;
+const port = process.env.PORT ? Number(process.env.PORT) : 8000;
 
 fastify.register(cors, { hook: 'preHandler' });
 fastify.register(require('fastify-knexjs'), {
