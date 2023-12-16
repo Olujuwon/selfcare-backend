@@ -16,7 +16,7 @@ steps:
       - .
       - '-f'
       - Dockerfile
-    id: Build
+    id: 'build'
     secretEnv:
       - PORT
       - VERSION
@@ -53,7 +53,7 @@ steps:
       - '--quiet'
     id: Deploy
     entrypoint: gcloud
-    waitFor: ['Run Playwright Tests']
+    waitFor: ['build']
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
 options:
