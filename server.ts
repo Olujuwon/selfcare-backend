@@ -8,7 +8,7 @@ import fastifyFirebase from 'fastify-firebase';
 dotenv.config();
 
 const serverHealth = require('server-health');
-const firebaseJsonCert = process.env.APP_CONTEXT === 'develop' ? './certs/firebase.json' : './firebase.json';
+const firebaseJsonCert = JSON.parse(process.env.FIREBASE_CERT as string);
 const fastify = Fastify({
   logger: true,
 });
@@ -79,7 +79,5 @@ fastify.listen({ port: port, host: '0.0.0.0' }, function (err, address) {
   }
   // @ts-ignore
   //fastify.initializeDatabaseTableWithBaseSettings();
-  const host = process.env.DB_HOST;
-  fastify.log.info(`server db host name ${host}`);
   fastify.log.info(`server listening on ${address}`);
 });

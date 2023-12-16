@@ -23,10 +23,11 @@ fixtureFactory.register('task', taskDataModel);
 
 test.beforeAll(async () => {
   apiContext = await request.newContext({
-    baseURL: 'http://localhost:' + process.env.PORT + '/',
+    baseURL: `${process.env.HOST}:${process.env.PORT}/`,
     extraHTTPHeaders: {
       authorization: `Bearer ${process.env.TOKEN}`,
     },
+    timeout: 50000,
   });
 });
 

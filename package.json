@@ -46,7 +46,6 @@
     "better-sqlite3": "^9.1.1",
     "dotenv": "16.3.1",
     "fastify-at-postgres": "0.2.1",
-    "fastify-auth": "^1.2.0",
     "fastify-firebase": "^1.0.3",
     "fastify-knexjs": "1.4.0",
     "fastify-plugin": "^4.5.1",
