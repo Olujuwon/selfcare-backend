@@ -8,7 +8,7 @@ import fastifyFirebase from 'fastify-firebase';
 dotenv.config();
 
 const serverHealth = require('server-health');
-const firebaseJsonCert = process.env.APP_CONTEXT === 'develop' ? './firebase.json' : '';
+const firebaseJsonCert = process.env.APP_CONTEXT === 'develop' ? './certs/firebase.json' : './firebase.json';
 const fastify = Fastify({
   logger: true,
 });
