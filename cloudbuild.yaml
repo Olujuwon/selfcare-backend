@@ -12,7 +12,6 @@ steps:
       - Dockerfile
     id: 'build'
     secretEnv:
-      - PORT
       - VERSION
       - SERVICE_NAME
       - DB_CONNECTION_STRING
@@ -70,8 +69,6 @@ tags:
   - selfcare_backend
 availableSecrets:
   secretManager:
-    - versionName: 'projects/$PROJECT_ID/secrets/PORT/versions/1'
-      env: 'PORT'
     - versionName: 'projects/$PROJECT_ID/secrets/VERSION/versions/1'
       env: 'VERSION'
     - versionName: 'projects/$PROJECT_ID/secrets/SERVICE_NAME/versions/1'
