@@ -1,7 +1,7 @@
 import Fastify from 'fastify';
 import * as dotenv from 'dotenv';
 import tasksRoutes from './routes/v1/tasks';
-import usersRoutes from './routes/v1/users';
+import { usersRoutes, authRoutes } from './routes/v1/users';
 import cors from '@fastify/cors';
 import fastifyFirebase from 'fastify-firebase';
 
@@ -58,6 +58,7 @@ fastify.get('*', (request, reply) => {
 // Service routes
 fastify.register(tasksRoutes);
 fastify.register(usersRoutes);
+fastify.register(authRoutes);
 
 fastify.setErrorHandler(function (error, request, reply) {
   if (error instanceof Fastify.errorCodes.FST_ERR_BAD_STATUS_CODE) {
