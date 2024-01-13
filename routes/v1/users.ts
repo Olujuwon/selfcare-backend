@@ -186,14 +186,16 @@ const deleteByIdEndpoint = {
   handler: deleteById,
 };
 
-const usersRoutes = async (fastify: FastifyInstance, options: FastifyRouteConfig) => {
+export const usersRoutes = async (fastify: FastifyInstance, options: FastifyRouteConfig) => {
   const _serviceName = 'users';
   fastify.addHook('preHandler', fastify.auth([fastify.verifyBearerAuth as never]));
   fastify.get(`/v1/${_serviceName}/:id`, getByIdEndpoint);
-  fastify.post(`/v1/${_serviceName}/signin`, signInEndpoint);
-  fastify.post(`/v1/${_serviceName}`, signUpEndpoint);
   fastify.patch(`/v1/${_serviceName}/:id`, updateByIdEndpoint);
   fastify.delete(`/v1/${_serviceName}/:id`, deleteByIdEndpoint);
 };
 
-export default usersRoutes;
+export const authRoutes = async (fastify: FastifyInstance, options: FastifyRouteConfig) => {
+  const _serviceName = 'auth';
+  fastify.post(`/v1/${_serviceName}/signin`, signInEndpoint);
+  fastify.post(`/v1/${_serviceName}`, signUpEndpoint);
+};
