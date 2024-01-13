@@ -22,7 +22,7 @@ test.beforeAll(async () => {
   apiContext = await request.newContext({
     baseURL: `${process.env.HOST}:${process.env.PORT}/`,
     extraHTTPHeaders: {
-      authorization: `Bearer ${process.env.TOKEN}`,
+      authorization: `Bearer ${process.env.API_AUTH_TOKEN}`,
     },
   });
 });
