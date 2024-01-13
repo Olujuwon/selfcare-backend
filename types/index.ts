@@ -15,6 +15,14 @@ export interface IUser {
   photo_url: string;
   phone_number: string;
   email: string;
-  token?: string;
+  token?: IServiceBearerToken;
   password?: string;
+}
+
+export interface IServiceBearerToken {
+  token: string;
+  id: string;
+  user_id: string;
+  created_at: Date;
+  updated_at: Date;
 }

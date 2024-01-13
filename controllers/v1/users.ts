@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth';
 import * as dotenv from 'dotenv';
 import { IUser } from '../../types';
+import { createServiceBearerToken } from './servicebearertokens';
 
 dotenv.config();
 
@@ -47,9 +48,6 @@ const _convertFirebaseUserRecordToSelfcareFormat = (userRecord: any) => {
       case 'phoneNumber':
         selfcareUser.phone_number = userRecord[key];
         break;
-      case 'stsTokenManager':
-        selfcareUser.token = userRecord[key].accessToken;
-        break;
       default:
     }
   });
@@ -59,9 +57,13 @@ const _convertFirebaseUserRecordToSelfcareFormat = (userRecord: any) => {
 export const signIn = async (request: FastifyRequest, reply: FastifyReply) => {
   const _version = process.env.VERSION;
   const { email: userEmail, password } = request.body as any;
+  const { knex } = request.server as FastifyInstance;
   try {
     const { user } = await signInWithEmailAndPassword(firebaseAuth, userEmail, password);
     const authenticatedUser = _convertFirebaseUserRecordToSelfcareFormat(user.toJSON());
+    const serviceBearerToken = createServiceBearerToken(authenticatedUser);
+    await knex('serviceBearerTokens').insert(serviceBearerToken);
+    authenticatedUser.token = serviceBearerToken;
     reply.code(200).send({
       version: _version,
       data: authenticatedUser,
