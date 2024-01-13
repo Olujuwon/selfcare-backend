@@ -48,7 +48,7 @@ test.describe(`${serviceName}-service tests`, () => {
   test('POST: Create user(s)', async () => {
     let users = await fixtureFactory.generate('user', 1);
     users = users.map((user: IUser) => ({ ...user, password: password }));
-    const createOneUser = await apiContext.post('v1/users', {
+    const createOneUser = await apiContext.post('v1/auth', {
       data: [...users],
     });
     const responseBody = await createOneUser.json();
@@ -60,7 +60,7 @@ test.describe(`${serviceName}-service tests`, () => {
   test('POST: Signin user', async () => {
     const userArr = await fixtureFactory.generate('user', 1);
     const user = userArr.map((user: IUser) => ({ ...user, password: password }));
-    const createOneUser = await apiContext.post('v1/users', {
+    const createOneUser = await apiContext.post('v1/auth', {
       data: [...user],
     });
     const responseBody = await createOneUser.json();
@@ -68,7 +68,7 @@ test.describe(`${serviceName}-service tests`, () => {
     expect(responseStatus === 201).toBeTruthy();
     expect(responseBody.data).toBeTruthy();
     const { email } = responseBody.data[0];
-    const signinUser = await apiContext.post('v1/users/signin', {
+    const signinUser = await apiContext.post('v1/auth/signin', {
       data: { email: email, password: password },
     });
     const signinResponseBody = await signinUser.json();
