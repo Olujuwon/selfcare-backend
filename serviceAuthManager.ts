@@ -1,37 +1,26 @@
-import { FastifyInstance, FastifyPluginOptions, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyPluginOptions, FastifyRequest } from 'fastify';
 import fastifyBearerAuth from '@fastify/bearer-auth';
 import fastifyAuth from '@fastify/auth';
 import fastifyPlugin from 'fastify-plugin';
 import * as dotenv from 'dotenv';
-import { IServiceBearerToken } from './types';
+import { isEqual } from 'lodash';
 
 dotenv.config();
 
-//Make bearer auth tpken system dynamically safe
-
-/*
- * TODO
- *  1. create service in controllers
- *  2. Create table in db and do migrations
- *
- *
- * */
-
-const verifyServiceBearerToken = (key: string, request: FastifyRequest) => {
-  if (!key) return false;
+const verifyServiceBearerToken = async (key: string, request: FastifyRequest): Promise<boolean> => {
   if (key) {
-    const { knex } = request.server as FastifyInstance;
-    return knex('serviceBearerTokens')
-      .select()
-      .where('token', key)
-      .timeout(1000, { cancel: true })
-      .then((serviceBearerToken: IServiceBearerToken) => {
-        if (serviceBearerToken.token.length > 0) return true;
-        return false;
-      })
-      .catch((error: unknown) => {
-        return false;
-      });
+    try {
+      const { knex } = request.server as FastifyInstance;
+      const tokenExists = await knex('servicebearertokens')
+        .select()
+        .where('token', JSON.stringify(key))
+        .timeout(1000, { cancel: true });
+      return isEqual(tokenExists[0].token, key);
+    } catch (error: unknown) {
+      return false;
+    }
+  } else {
+    return false;
   }
 };
 
@@ -40,20 +29,17 @@ const keys = [process.env.API_AUTH_TOKEN as string];
 const authorizedKeysSet = new Set(keys);
 
 module.exports = fastifyPlugin(async function (fastify: FastifyInstance, opts: FastifyPluginOptions) {
-  fastify
-    .register(fastifyAuth)
-    .register(fastifyBearerAuth, {
-      addHook: false,
-      keys: authorizedKeysSet,
-      verifyErrorLogLevel: 'debug',
-      auth: verifyServiceBearerToken,
-    });
-  fastify.decorate('authenticate', async function (request: any, reply: FastifyReply) {
-    console.log('KEYS', keys);
+  fastify.register(fastifyAuth).register(fastifyBearerAuth, {
+    addHook: false,
+    keys: authorizedKeysSet,
+    verifyErrorLogLevel: 'debug',
+    auth: verifyServiceBearerToken,
+  });
+  /*fastify.decorate('authenticate', async function (request: any, reply: FastifyReply) {
     try {
-      await request.apiKeyVerify();
+      /!*await request.apiKeyVerify();*!/
     } catch (err) {
       reply.send(err);
     }
-  });
+  });*/
 });

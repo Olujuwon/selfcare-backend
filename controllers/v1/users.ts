@@ -62,8 +62,10 @@ export const signIn = async (request: FastifyRequest, reply: FastifyReply) => {
     const { user } = await signInWithEmailAndPassword(firebaseAuth, userEmail, password);
     const authenticatedUser = _convertFirebaseUserRecordToSelfcareFormat(user.toJSON());
     const serviceBearerToken = createServiceBearerToken(authenticatedUser);
-    await knex('serviceBearerTokens').insert(serviceBearerToken);
-    authenticatedUser.token = serviceBearerToken;
+    const tokenToSend = serviceBearerToken.token;
+    serviceBearerToken.token = JSON.stringify(serviceBearerToken.token);
+    await knex('servicebearertokens').insert(serviceBearerToken);
+    authenticatedUser.token = tokenToSend;
     reply.code(200).send({
       version: _version,
       data: authenticatedUser,
@@ -104,8 +106,11 @@ export const queryById = async (request: FastifyRequest, reply: FastifyReply) =>
   const _version = process.env.VERSION;
   const { firebase } = request.server as any;
   const { id } = request.params as any;
+  console.log('******Current user*****', id);
   try {
-    const getOneById = await firebase.auth().getUser(id);
+    //TODO: this connects to main firebase and not emulator only works in test or prod
+    const getOneById = await firebase.auth(firebaseAuth).getUser(id);
+    console.log('******Current user*****02', getOneById);
     const user = _convertFirebaseUserRecordToSelfcareFormat(getOneById.toJSON());
     reply.code(200).send({
       version: _version,

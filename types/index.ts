@@ -15,7 +15,7 @@ export interface IUser {
   photo_url: string;
   phone_number: string;
   email: string;
-  token?: IServiceBearerToken;
+  token?: string;
   password?: string;
 }
 
