@@ -30,6 +30,10 @@ steps:
       - TEST_USER_PASSWORD
       - TEST_USER_ID
       - FIREBASE_CERT
+      - JWT_SECRET
+      - SENDGRID_API_KEY
+      - RESET_PASSWORD_URL
+      - USER_ACCOUNT_VERIFICATION_URL
 
   # -------------------- Push to google repo ---------------------------------
   - name: gcr.io/cloud-builders/docker
@@ -105,4 +109,12 @@ availableSecrets:
       env: 'TEST_USER_ID'
     - versionName: 'projects/$PROJECT_ID/secrets/FIREBASE_CERT/versions/1'
       env: 'FIREBASE_CERT'
+    - versionName: 'projects/$PROJECT_ID/secrets/JWT_SECRET/versions/1'
+      env: 'JWT_SECRET'
+    - versionName: 'projects/$PROJECT_ID/secrets/SENDGRID_API_KEY/versions/1'
+      env: 'SENDGRID_API_KEY'
+    - versionName: 'projects/$PROJECT_ID/secrets/RESET_PASSWORD_URL/versions/1'
+      env: 'RESET_PASSWORD_URL'
+    - versionName: 'projects/$PROJECT_ID/secrets/USER_ACCOUNT_VERIFICATION_URL/versions/1'
+      env: 'USER_ACCOUNT_VERIFICATION_URL'
 # [END cloudbuild_quickstart_build]
