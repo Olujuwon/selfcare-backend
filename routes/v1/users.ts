@@ -1,5 +1,12 @@
 import { type FastifyInstance } from 'fastify';
-import { deleteById, updateById, insertNew, queryById, signIn } from '../../controllers/v1/users';
+import {
+  deleteById,
+  updateById,
+  insertNew,
+  queryById,
+  signIn,
+  sendUserPasswordResetLink,
+} from '../../controllers/v1/users';
 import { FastifyRouteConfig } from 'fastify/types/route';
 
 const signInEndpoint = {
@@ -156,6 +163,38 @@ const updateByIdEndpoint = {
   handler: updateById,
 };
 
+const sendUserPasswordResetLinkEndpoint = {
+  schema: {
+    params: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+      },
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          version: { type: 'string' },
+          data: {
+            type: 'string',
+          },
+          status: { type: 'integer' },
+        },
+      },
+      401: {
+        type: 'object',
+        properties: {
+          version: { type: 'string' },
+          error: { type: 'string' },
+          status: { type: 'integer' },
+        },
+      },
+    },
+  },
+  handler: sendUserPasswordResetLink,
+};
+
 const deleteByIdEndpoint = {
   schema: {
     params: {
@@ -198,4 +237,5 @@ export const authRoutes = async (fastify: FastifyInstance, options: FastifyRoute
   const _serviceName = 'auth';
   fastify.post(`/v1/${_serviceName}/signin`, signInEndpoint);
   fastify.post(`/v1/${_serviceName}`, signUpEndpoint);
+  fastify.get(`/v1/${_serviceName}/passwordResetEmail/:id`, sendUserPasswordResetLinkEndpoint);
 };
