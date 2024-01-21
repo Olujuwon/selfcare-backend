@@ -17,11 +17,14 @@ export interface IUser {
   email: string;
   token?: string;
   password?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface IServiceBearerToken {
   token: string;
-  id: string;
+  id?: string;
+  status?: 'active' | 'deleted';
   user_id: string;
   created_at: Date;
   updated_at: Date;

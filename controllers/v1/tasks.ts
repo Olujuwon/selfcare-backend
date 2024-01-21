@@ -59,7 +59,6 @@ export const queryById = async (request: FastifyRequest, reply: FastifyReply) =>
   const { id } = request.params as RequestParamsDefault;
   try {
     const getOneById = await knex(_serviceName).select().where('id', '=', Number(id)).timeout(1000, { cancel: true });
-
     reply.code(200).send({
       version: _version,
       data: getOneById,
@@ -100,7 +99,6 @@ export const insertNew = async (request: FastifyRequest, reply: FastifyReply) =>
 export const updateById = async (request: FastifyRequest, reply: FastifyReply) => {
   const _version = process.env.VERSION;
   const _serviceName = process.env.SERVICE_NAME;
-  // @ts-ignore
   const { knex } = request.server as FastifyInstance;
   const updateObject = request.body as ITask;
   // @ts-ignore
@@ -133,7 +131,6 @@ export const updateById = async (request: FastifyRequest, reply: FastifyReply) =
 export const deleteById = async (request: FastifyRequest, reply: FastifyReply) => {
   const _version = process.env.VERSION;
   const _serviceName = process.env.SERVICE_NAME;
-  // @ts-ignore
   const { knex } = request.server as FastifyInstance;
   // @ts-ignore
   const { id } = request.params as RequestParamsDefault;
