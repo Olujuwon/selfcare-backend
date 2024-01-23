@@ -13,11 +13,11 @@ export const insertNew = async (request: FastifyRequest, reply: FastifyReply) =>
   const _version = process.env.VERSION;
   const _serviceName = 'users';
   const { knex } = request.server as FastifyInstance;
-  const usersWithEncryptedPass = [...(request.body as IUser[])].map((user) => {
-    const hash = bcrypt.hashSync(user.password as string, 10);
-    return { ...user, password: hash };
-  });
   try {
+    const usersWithEncryptedPass = [...(request.body as IUser[])].map((user) => {
+      const hash = bcrypt.hashSync(user.password as string, 10);
+      return { ...user, password: hash };
+    });
     const usersCreated = await knex(_serviceName).insert(usersWithEncryptedPass, ['id', 'display_name', 'email']);
     const sendEmailPromises: Promise<any>[] = [];
     usersCreated.forEach((user: IUser) => {
